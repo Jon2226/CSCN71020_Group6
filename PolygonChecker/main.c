@@ -1,14 +1,20 @@
-#include <stdio.h>
-#include <stdbool.h>
+// CSCN71020 - Fall 2022 - Group Project
+// Group 6: Jonathan Ward, Drasti Patel, Komalpreet Kaur, Nonso Ekpunobi
 
 #include "main.h"
 #include "triangleSolver.h"
+#include <stdio.h>
+#include <stdbool.h>
 
-int side = 0;
+#define SIDES_PER_TRIANGLE 3
 
-int main() {
+// int side = 0;		// not sure what this was for...
+
+int main()
+{
 	bool continueProgram = true;
-	while (continueProgram) {
+	while (continueProgram)
+	{
 		printWelcome();
 
 		int shapeChoice = printShapeMenu();
@@ -17,10 +23,13 @@ int main() {
 		{
 		case 1:
 			printf_s("Triangle selected.\n");
-			int triangleSides[3] = { 0, 0, 0 };
+			int triangleSides[SIDES_PER_TRIANGLE] = { 0, 0, 0 };
 			int* triangleSidesPtr = getTriangleSides(triangleSides);
 			//printf_s("! %d\n", triangleSidesPtr[0]);
-			char* result = analyzeTriangle(triangleSidesPtr[0], triangleSidesPtr[1], triangleSidesPtr[2]);
+
+			char* result = 
+				analyzeTriangle(triangleSidesPtr[0], triangleSidesPtr[1], triangleSidesPtr[2]);
+			
 			printf_s("%s\n", result);
 			break;
 		case 0:
@@ -34,15 +43,17 @@ int main() {
 	return 0;
 }
 
-void printWelcome() {
+void printWelcome()
+{
 	printf_s("\n");
 	printf_s(" **********************\n");
 	printf_s("**     Welcome to     **\n");
 	printf_s("**   Polygon Checker  **\n");
-	printf_s(" **********************\n");
+	printf_s(" **********************\n\n");
 }
 
-int printShapeMenu() {
+int printShapeMenu()
+{
 	printf_s("1. Triangle\n");
 	printf_s("0. Exit\n");
 
@@ -54,9 +65,10 @@ int printShapeMenu() {
 	return shapeChoice;
 }
 
-int* getTriangleSides(int* triangleSides) {
+int* getTriangleSides(int* triangleSides)
+{
 	printf_s("Enter the three sides of the triangle: ");
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < SIDES_PER_TRIANGLE; i++)
 	{
 		scanf_s("%d", &triangleSides[i]);
 	}
