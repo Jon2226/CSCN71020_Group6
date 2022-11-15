@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#define SIDES_PER_TRIANGLE 3
+#define SIDES_PER_TRIANGLE 3    // no magic values!
 
 // int side = 0;		// not sure what this was for...
 
@@ -22,21 +22,26 @@ int main()
 		switch (shapeChoice)
 		{
 		case 1:
-			printf_s("Triangle selected.\n");
-			int triangleSides[SIDES_PER_TRIANGLE] = { 0, 0, 0 };
-			int* triangleSidesPtr = getTriangleSides(triangleSides);
-			//printf_s("! %d\n", triangleSidesPtr[0]);
+			puts("Triangle selected.\n");
+			double triangleSides[SIDES_PER_TRIANGLE] = { 0, 0, 0 };
+			double* triangleSidesPtr = getTriangleSides(triangleSides);
 
-			char* result = 
-				analyzeTriangle(triangleSidesPtr[0], triangleSidesPtr[1], triangleSidesPtr[2]);
+            puts("Reading the side lengths as follows:\n");
+            for (int i = 0; i < SIDES_PER_TRIANGLE; i++)
+			    printf("! %g\n", triangleSidesPtr[i]);
+
+			char* result = analyzeTriangle(triangleSidesPtr);
 			
-			printf_s("%s\n", result);
+			puts(result);
+            puts("\n");
 			break;
+
 		case 0:
 			continueProgram = false;
 			break;
+
 		default:
-			printf_s("Invalid value entered.\n");
+			puts("Invalid value entered.\n");
 			break;
 		}
 	}
@@ -45,32 +50,31 @@ int main()
 
 void printWelcome()
 {
-	printf_s("\n");
-	printf_s(" **********************\n");
-	printf_s("**     Welcome to     **\n");
-	printf_s("**   Polygon Checker  **\n");
-	printf_s(" **********************\n\n");
+	puts("\n");
+	puts(" **********************\n");
+	puts("**     Welcome to     **\n");
+	puts("**   Polygon Checker  **\n");
+	puts(" **********************\n\n");
 }
 
 int printShapeMenu()
 {
-	printf_s("1. Triangle\n");
-	printf_s("0. Exit\n");
+	puts("1. Triangle\n");
+	puts("0. Exit\n");
 
 	int shapeChoice;
-
-	printf_s("Enter number: ");
+	puts("Enter number: ");
 	scanf_s("%1o", &shapeChoice);
 
 	return shapeChoice;
 }
 
-int* getTriangleSides(int* triangleSides)
+double* getTriangleSides(double* triangleSides)
 {
-	printf_s("Enter the three sides of the triangle: ");
+	puts("Enter the three side lengths of the triangle: ");
 	for (int i = 0; i < SIDES_PER_TRIANGLE; i++)
 	{
-		scanf_s("%d", &triangleSides[i]);
+		scanf_s("%lf", &triangleSides[i]);
 	}
 	return triangleSides;
 }

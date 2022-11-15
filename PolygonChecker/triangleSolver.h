@@ -2,5 +2,8 @@
 // Group 6: Jonathan Ward, Drasti Patel, Komalpreet Kaur, Nonso Ekpunobi
 
 #pragma once
+#include <stdbool.h>
 
-char* analyzeTriangle(int side1, int side2, int side3);
+char* analyzeTriangle(double* sides);
+bool isTriangle(double* sides);
+bool findAngles(double* sides, double* angles);

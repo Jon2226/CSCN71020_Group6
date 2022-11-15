@@ -5,20 +5,20 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-char* analyzeTriangle(int side1, int side2, int side3)
+char* analyzeTriangle(double* sides)
 {
 	char* result = "";
-	if (side1 <= 0 || side2 <= 0 || side3 <= 0)
+	if (!isTriangle(sides))     // single function to check this
 	{
 		result = "Not a triangle";
 	}
-	else if (side1 == side2 && side1 == side3)
+	else if (sides[0] == sides[1] && sides[0] == sides[2])
 	{
 		result = "Equilateral triangle";
 	}
-	else if ((side1 == side2 && side1 != side3) || 
-		(side1 == side3 && side1 != side2) || 
-		(side2 == side3 && side2 != side1))
+	else if ((sides[0] == sides[1] && sides[0] != sides[2]) || 
+		(sides[0] == sides[2] && sides[0] != sides[1]) || 
+		(sides[1] == sides[2] && sides[1] != sides[0]))
 	{
 		result = "Isosceles triangle";
 	}
@@ -26,6 +26,28 @@ char* analyzeTriangle(int side1, int side2, int side3)
 	{
 		result = "Scalene triangle";
 	}
-
 	return result;
+}
+
+bool isTriangle(double* sides)
+{
+    // checking for <= 0 should be handled by input validation, but 
+    // we will still include this check here... just in case
+    if (sides[0] <= 0 || sides[1] <= 0 || sides[2] <= 0)
+        return false;
+
+    else if (((sides[0] + sides[1]) > sides[2]) &&
+        ((sides[0] + sides[2]) > sides[1]) &&
+        ((sides[1] + sides[2]) > sides[0]))
+        return true;
+
+    else
+        return false;
+}
+
+bool findAngles(double* sides, double* angles)
+{
+
+
+    return true;
 }
