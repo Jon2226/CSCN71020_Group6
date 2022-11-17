@@ -9,7 +9,6 @@
 #define SIDES_PER_TRIANGLE 3    // no magic values!
 
 // int side = 0;		// not sure what this was for...
-
 int main()
 {
 	bool continueProgram = true;
