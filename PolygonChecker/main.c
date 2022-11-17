@@ -1,14 +1,16 @@
 // CSCN71020 - Fall 2022 - Group Project
 // Group 6: Jonathan Ward, Drasti Patel, Komalpreet Kaur, Nonso Ekpunobi
 
-#include "main.h"
-#include "triangleSolver.h"
-#include <stdio.h>
-#include <stdbool.h>
+// main function for polygon checker program, which will take side lengths or 
+// (x,y) coordinates from a user, and use them to determine whether the given 
+// values can form a polygon, and other information about the polygon formed
 
-#define SIDES_PER_TRIANGLE 3    // no magic values!
+#include "polygon.h"
+#include "interface.h"
+#include "input.h"
 
-// int side = 0;		// not sure what this was for...
+#define SIDES_PER_TRIANGLE  3    // no magic values!
+
 int main()
 {
 	bool continueProgram = true;
@@ -16,7 +18,7 @@ int main()
 	{
 		printWelcome();
 
-		int shapeChoice = printShapeMenu();
+        int shapeChoice = printShapeMenu();
 
 		switch (shapeChoice)
 		{
@@ -40,40 +42,9 @@ int main()
 			break;
 
 		default:
-			puts("Invalid value entered.\n");
+			puts("\nInvalid value entered.\n");
 			break;
 		}
 	}
 	return 0;
-}
-
-void printWelcome()
-{
-	puts("\n");
-	puts(" **********************\n");
-	puts("**     Welcome to     **\n");
-	puts("**   Polygon Checker  **\n");
-	puts(" **********************\n\n");
-}
-
-int printShapeMenu()
-{
-	puts("1. Triangle\n");
-	puts("0. Exit\n");
-
-	int shapeChoice;
-	puts("Enter number: ");
-	scanf_s("%1o", &shapeChoice);
-
-	return shapeChoice;
-}
-
-double* getTriangleSides(double* triangleSides)
-{
-	puts("Enter the three side lengths of the triangle: ");
-	for (int i = 0; i < SIDES_PER_TRIANGLE; i++)
-	{
-		scanf_s("%lf", &triangleSides[i]);
-	}
-	return triangleSides;
 }

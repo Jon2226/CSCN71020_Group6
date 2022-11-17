@@ -1,9 +1,11 @@
 // CSCN71020 - Fall 2022 - Group Project
 // Group 6: Jonathan Ward, Drasti Patel, Komalpreet Kaur, Nonso Ekpunobi
 
-#include "triangleSolver.h"
+// implementation of calculation functions for polygon checker
+
+#include "polygon.h"
 #include <stdio.h>
-#include <stdbool.h>
+#include <math.h>
 
 char* analyzeTriangle(double* sides)
 {
@@ -45,9 +47,27 @@ bool isTriangle(double* sides)
         return false;
 }
 
-bool findAngles(double* sides, double* angles)
+// determine angles based on side lengths
+void findAngles(double* sides, double* angles)
 {
+    // drasti
 
 
-    return true;
+}
+
+// determine side lengths based on coordinates of points
+void findSideLengths(double* xValues, double* yValues, double* sides)
+{
+    // komal
+    // using pythagorean theorem
+
+}
+
+double calculatePerimeter(double* sideLenths, int numSides)
+{
+    double perimeter = 0;
+    for (int i = 0; i < numSides; i++)
+        perimeter += sideLenths[i];
+
+    return perimeter;
 }
