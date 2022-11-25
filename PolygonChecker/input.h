@@ -16,4 +16,6 @@ bool stringIsNumeric(char* string);
 
 bool promptAndGetDoubleInput(char* prompt, double* response);
 
+bool promptAndGetIntegerInput(char* prompt, int* response);
+
 bool promptAndGetStringInput(char* prompt, char* response, size_t max);

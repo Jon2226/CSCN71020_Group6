@@ -22,28 +22,26 @@ int printShapeMenu()
     puts("1. Triangle\n");
     puts("0. Exit\n");
 
-    double shapeChoice = 0;
-    puts("Enter number: ");
-    scanf_s("%lf", &shapeChoice);       // scanf bad
+    int choice = 0;
+    while (!promptAndGetIntegerInput("Enter number: ", &choice))
+        puts("Please try again.\n");
 
-    // harrison
-    // promptAndGetDoubleInput(char* prompt, double* userInput)
-
-    return (int)shapeChoice;
+    return choice;
 }
 
-double* getTriangleSides(double* triangleSides)
+bool getTriangleSides(double* triangleSides)
 {
     puts("Enter the three side lengths of the triangle: ");
     for (int i = 0; i < SIDES_PER_TRIANGLE; i++)
     {
-        scanf_s("%lf", &triangleSides[i]);    // very unsafe input
-        // better input
-
-    // harrison
-        // promptAndGetDoubleInput(char* prompt, double* userInput)
+        // scanf_s("%lf", &triangleSides[i]);    // very unsafe input
+        // better input function
+        printf("Side %d: ", i+1);
+        if (!promptAndGetDoubleInput("", &triangleSides[i]))
+            return false;   // should change this to give user another chance
+        puts("");   // just a newline for readability
     }
-    return triangleSides;
+    return true;
 }
 
 // take x and y points from user
@@ -51,3 +49,4 @@ bool getPoints(double* xValues, double* yValues)
 {
 
 }
+

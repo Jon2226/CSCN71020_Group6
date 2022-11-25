@@ -13,36 +13,34 @@
 
 int main()
 {
+    printWelcome();
 	bool continueProgram = true;
 	while (continueProgram)
 	{
-		printWelcome();
-
         int shapeChoice = printShapeMenu();
-
 		switch (shapeChoice)
 		{
+        case 0:
+            continueProgram = false;
+            break;
+
 		case 1:
 			puts("Triangle selected.\n");
 			double triangleSides[SIDES_PER_TRIANGLE] = { 0, 0, 0 };
-			double* triangleSidesPtr = getTriangleSides(triangleSides);
+			getTriangleSides(triangleSides);        // fix this
 
             puts("Reading the side lengths as follows:\n");
             for (int i = 0; i < SIDES_PER_TRIANGLE; i++)
-			    printf("! %g\n", triangleSidesPtr[i]);
+			    printf("Side %d: %g\n", i, triangleSides[i]);
 
-			char* result = analyzeTriangle(triangleSidesPtr);
+			char* result = analyzeTriangle(triangleSides);
 			
 			puts(result);
             puts("\n");
 			break;
 
-		case 0:
-			continueProgram = false;
-			break;
-
 		default:
-			puts("\nInvalid value entered.\n");
+			puts("Invalid value entered.\n");
 			break;
 		}
 	}

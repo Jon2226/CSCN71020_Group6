@@ -10,6 +10,6 @@ void printWelcome();
 
 int printShapeMenu();
 
-double* getTriangleSides(double* triangleSides);
+bool getTriangleSides(double* triangleSides);
 
 bool getPoints(double* xValues, double* yValues);

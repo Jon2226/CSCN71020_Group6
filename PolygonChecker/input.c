@@ -10,6 +10,7 @@
 #include <ctype.h>
 
 #define MAXSTRINGTODOUBLE		20
+#define MAXSTRINGTOINT		    12      // more than enough for unsigned long
 
 int countOfCharInString(char* string, char c)
 {
@@ -72,6 +73,23 @@ bool promptAndGetDoubleInput(char* prompt, double* userInput)
     else
     {
         *userInput = (double)atof(input);
+        return true;
+    }
+}
+
+bool promptAndGetIntegerInput(char* prompt, int* userInput)
+{
+    puts(prompt);
+
+    char input[MAXSTRINGTOINT];
+    fgets(input, (int)MAXSTRINGTOINT, stdin);
+    removeNewLineFromString(input);
+
+    if (!stringIsNumeric(input))
+        return false;
+    else
+    {
+        *userInput = (int)atof(input);
         return true;
     }
 }
