@@ -32,6 +32,15 @@ void removeNewLineFromString(char* string)
     }
 }
 
+void removeWhitespaceFromString(char* string)
+{
+    for (int i = 0; i < strlen(string); i++)
+    {
+        if (string[i] == '\n' || string[i] == '\t' || string[i] == ' ')
+            string[i] = '\0';
+    }
+}
+
 bool stringIsNumeric(char* string)
 {
     for (int i = 0; i < strlen(string); i++)

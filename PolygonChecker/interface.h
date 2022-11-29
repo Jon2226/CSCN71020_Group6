@@ -6,10 +6,12 @@
 #pragma once
 #include <stdbool.h>
 
-void printWelcome();
+void printWelcome(void);
 
-int printShapeMenu();
+void printMainMenu(void);
 
-bool getTriangleSides(double* triangleSides);
+bool inputAndHandleMenuResponse(int* numSides, double* sideLengths);
 
-bool getPoints(double* xValues, double* yValues);
+int inputSideLengths(double* sideLengths);
+
+bool inputPoints(double* xValues, double* yValues);

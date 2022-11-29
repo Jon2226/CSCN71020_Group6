@@ -12,6 +12,8 @@ int countOfCharInString(char* string, char c);
 
 void removeNewLineFromString(char* string);
 
+void removeWhitespaceFromString(char* string);
+
 bool stringIsNumeric(char* string);
 
 bool promptAndGetDoubleInput(char* prompt, double* response);

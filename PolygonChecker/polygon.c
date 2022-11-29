@@ -4,8 +4,22 @@
 // implementation of calculation functions for polygon checker
 
 #include "polygon.h"
+#include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+
+POLYGON createPolygon(int numSides, double* sides, double* angles,
+    bool regular, char* name, char* description)
+{
+    POLYGON p;
+    p.numSides = numSides;
+    // pass arrays
+
+    p.regular = regular;
+    p.name = name;
+    p.description = description;
+    return p;
+}
 
 char* analyzeTriangle(double* sides)
 {
@@ -31,6 +45,15 @@ char* analyzeTriangle(double* sides)
 	return result;
 }
 
+char* analyzeQuadrilateral(double* sides, double* angles)
+{
+    int numEquivalentSides = 0;
+    int numEquivalentAngles = 0;
+
+    return "";
+}
+
+// redundant legacy function
 bool isTriangle(double* sides)
 {
     // checking for <= 0 should be handled by input validation, but 
@@ -101,7 +124,7 @@ bool isPolygon(double* side, int numSides)
 bool isRegular(double* side, int numSides)
 {
     // return true if all side lengths are the same
-    int side0 = side[0];
+    double side0 = side[0];
     for (int i = 1; i < numSides; i++)
         if (side[i] != side[0])
             return false;
@@ -157,10 +180,31 @@ char* findPolygonName(int numSides)
 char* findPolygonDescription()
 {
     // by calling analyzeTriangle and analyzeQuadrilateral
+
+    return "";
 }
 
 double findRegularAngles(int numSides)
 {
     double numberOfSides = numSides;
     return ((double)180 * (numberOfSides - (double)2) / numberOfSides);
+}
+
+bool pointsMatch(double* xValues, double* yValues, int numSides)
+{
+    for (int i = 0; i < numSides; i++)
+        for (int j = i + 1; j < numSides; j++)
+            if (xValues[i] == xValues[j])
+                if (yValues[i] == yValues[j])
+                    return true;
+
+    return false;
+}
+
+void printPolygonInfo(POLYGON* p)
+{
+    // if pointsMatch, do not print coordinates because it likely means that
+    // they are still zeroed because they have not been given by the user
+    if (!pointsMatch(p->xValues, p->yValues, p->numSides))
+        ;// print coordinates
 }
