@@ -2,7 +2,7 @@
 // Group 6: Jonathan Ward, Drasti Patel, Komalpreet Kaur, Nonso Ekpunobi
 
 // user interface implementation for polygon checker
-
+#include <math.h>
 #include "polygon.h"
 #include "interface.h"
 #include "input.h"
@@ -101,3 +101,4 @@ bool inputPoints(double* xValues, double* yValues)
 {
 
 }
+

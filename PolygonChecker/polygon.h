@@ -32,6 +32,8 @@ char* analyzeQuadrilateral(double* sides, double* angles);
 
 bool isTriangle(double* sides);
 
+double radiansToDegrees(double rad);
+
 void findAngles(double* sides, double* angles);
 
 void findSideLengths(double* xValues, double* yValues, double* sides);

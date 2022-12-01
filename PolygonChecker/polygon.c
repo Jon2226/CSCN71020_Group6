@@ -70,13 +70,25 @@ bool isTriangle(double* sides)
         return false;
 }
 
+
+double radiansToDegrees(double rad)
+{
+    return rad * (180.0 / acos(-1));
+}
+
 // determine angles based on side lengths
 void findAngles(double* sides, double* angles)
 {
-    // drasti
+    angles[0] = radiansToDegrees(acos((pow(sides[1], 2) + pow(sides[2], 2) - pow(sides[0], 2)) / (2 * sides[1] * sides[2])));
 
+    angles[1] = radiansToDegrees(acos((pow(sides[0], 2) + pow(sides[2], 2) - pow(sides[1], 2)) / (2 * sides[0] * sides[2])));
 
+    angles[2] = radiansToDegrees(acos((pow(sides[0], 2) + pow(sides[1], 2) - pow(sides[2], 2)) / (2 * sides[0] * sides[1])));
+
+    printf("Angles: %lf  %lf  %lf \n\n\n", angles[0], angles[1], angles[2]);
 }
+
+
 
 // determine side lengths based on coordinates of points
 void findSideLengths(double* xValues, double* yValues, double* sides)

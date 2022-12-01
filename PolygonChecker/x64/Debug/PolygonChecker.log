@@ -1,3 +1,2 @@
-﻿  interface.c
-C:\Users\Jon\Documents\Nextcloud\Code\Git\CSCN71020_Group6\PolygonChecker\interface.c(103): warning C4716: 'inputPoints': must return a value
-  PolygonChecker.vcxproj -> C:\Users\Jon\Documents\Nextcloud\Code\Git\CSCN71020_Group6\x64\Debug\PolygonChecker.exe
+﻿  polygon.c
+  PolygonChecker.vcxproj -> C:\Users\user\Source\Repos\CSCN71020_Group6\x64\Debug\PolygonChecker.exe
