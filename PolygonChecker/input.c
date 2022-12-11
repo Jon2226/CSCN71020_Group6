@@ -32,7 +32,7 @@ void removeNewLineFromString(char* string)
     }
 }
 
-void removeWhitespaceFromString(char* string)
+void removeWhiteSpaceFromString(char* string)
 {
     for (int i = 0; i < strlen(string); i++)
     {
@@ -113,4 +113,40 @@ bool promptAndGetStringInput(char* prompt, char* userInput, size_t maxLength)
         return true;
     else
         return false;
+}
+
+// Special input function to check for non-numeric menu escape codes.
+// Returns 0 for success, -1, for failure, 1 for finished, 2 for cancel.  
+int promptAndGetDoubleInputWithEscape(char* prompt, double* userInput, 
+    char finished, char cancel)
+{
+    puts(prompt);
+
+    char input[MAXSTRINGTODOUBLE];
+    fgets(input, (int)MAXSTRINGTODOUBLE, stdin);
+    removeNewLineFromString(input);
+
+    if (input[0] == finished || tolower(input[0]) == finished)
+        return 1;
+    if (input[0] == cancel || tolower(input[0]) == cancel)
+        return 2;
+
+    if (!stringIsNumeric(input))
+        return -1;
+    else
+    {
+        *userInput = (double)atof(input);
+        return 0;
+    }
+}
+
+// for collecting single char e.g. for menu inputs, and ignoring everything 
+// that comes afterward (e.g. the dangling newline)
+char returnSingleChar(void)
+{
+    char firstChar = getc(stdin);
+    char garbage = ' ';
+    while (garbage != '\n' && garbage != EOF)
+        garbage = getc(stdin);
+    return firstChar;
 }

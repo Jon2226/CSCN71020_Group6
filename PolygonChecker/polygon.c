@@ -3,126 +3,68 @@
 
 // implementation of calculation functions for polygon checker
 
+#define _CRT_SECURE_NO_WARNINGS
 #include "polygon.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 
-POLYGON createPolygon(int numSides, double* sides, double* angles,
-    bool regular, char* name, char* description)
+point createPoint(double xValue, double yValue)
 {
-    POLYGON p;
-    p.numSides = numSides;
-    // pass arrays
-
-    p.regular = regular;
-    p.name = name;
-    p.description = description;
+    point p = { 0 };
+    p.x = xValue;
+    p.y = yValue;
     return p;
 }
 
-char* analyzeTriangle(double* sides)
+POLYGON createPolygon(int numSides, double* sideLengths, double* angles, 
+    point* coordinates, bool regular, char* name, char* description)
 {
-	char* result = "";
-	if (!isTriangle(sides))     // single function to check this
-	{
-		result = "Not a triangle";
-	}
-	else if (sides[0] == sides[1] && sides[0] == sides[2])
-	{
-		result = "Equilateral triangle";
-	}
-	else if ((sides[0] == sides[1] && sides[0] != sides[2]) || 
-		(sides[0] == sides[2] && sides[0] != sides[1]) || 
-		(sides[1] == sides[2] && sides[1] != sides[0]))
-	{
-		result = "Isosceles triangle";
-	}
-	else
-	{
-		result = "Scalene triangle";
-	}
-	return result;
+    POLYGON p = { 0 };
+    p.numSides = numSides;
+    for (size_t i = 0; i < numSides; i++)
+    {
+        p.sides[i] = sideLengths[i];
+        p.angles[i] = angles[i];
+        p.vertices[i].x = coordinates[i].x;
+        p.vertices[i].y = coordinates[i].y;
+    }
+    p.regular = regular;
+    strncpy(p.name, name, MAX_STRING_LEN);
+    p.name[MAX_STRING_LEN - 1] = '\0';
+    strncpy(p.description, description, MAX_STRING_LEN);
+    p.name[MAX_STRING_LEN - 1] = '\0';
+    return p;
 }
 
-char* analyzeQuadrilateral(double* sides, double* angles)
+bool analyzePolygon(int numSides, double* sideLengths, double* angles)
 {
-    int numEquivalentSides = 0;
-    int numEquivalentAngles = 0;
-
-    return "";
-}
-
-// redundant legacy function
-bool isTriangle(double* sides)
-{
-    // checking for <= 0 should be handled by input validation, but 
-    // we will still include this check here... just in case
-    if (sides[0] <= 0 || sides[1] <= 0 || sides[2] <= 0)
+    if (!isPolygon(sideLengths, numSides))
         return false;
 
-    else if (((sides[0] + sides[1]) > sides[2]) &&
-        ((sides[0] + sides[2]) > sides[1]) &&
-        ((sides[1] + sides[2]) > sides[0]))
-        return true;
 
-    else
-        return false;
+
+
+    return true;
 }
 
-
-double radiansToDegrees(double rad)
-{
-    return rad * (180.0 / acos(-1));
-}
-
-// determine angles based on side lengths
-void findAngles(double* sides, double* angles)
-{
-    angles[0] = radiansToDegrees(acos((pow(sides[1], 2) + pow(sides[2], 2) - pow(sides[0], 2)) / (2 * sides[1] * sides[2])));
-
-    angles[1] = radiansToDegrees(acos((pow(sides[0], 2) + pow(sides[2], 2) - pow(sides[1], 2)) / (2 * sides[0] * sides[2])));
-
-    angles[2] = radiansToDegrees(acos((pow(sides[0], 2) + pow(sides[1], 2) - pow(sides[2], 2)) / (2 * sides[0] * sides[1])));
-
-    printf("Angles: %lf  %lf  %lf \n\n\n", angles[0], angles[1], angles[2]);
-}
-
-
-
-// determine side lengths based on coordinates of points
-void findSideLengths(double* xValues, double* yValues, double* sides)
-{
-    // komal
-    // using pythagorean theorem
-
-}
-
-double calculatePerimeter(double* sideLenths, int numSides)
-{
-    double perimeter = 0;
-    for (int i = 0; i < numSides; i++)
-        perimeter += sideLenths[i];
-
-    return perimeter;
-}
-
-bool isPolygon(double* side, int numSides)
+bool isPolygon(double* sides, int numSides)
 {
     // check that all side lengths are more than zero
-    for (int i = 0; i < numSides; i++)
-        if (side[i] <= 0)
+    for (size_t i = 0; i < numSides; i++)
+        if (sides[i] <= 0)
             return false;
 
     // find sum of all side lengths, and length of longest side
     double sum = 0;
     double longest = 0;
-    for (int i = 0; i < numSides; i++)
+    for (size_t i = 0; i < numSides; i++)
     {
-        sum += side[i];
+        sum += sides[i];
         // longest = longest < side[i] ? side[i] : longest;
-        if (longest < side[i])
-            longest = side[i];
+        if (longest < sides[i])
+            longest = sides[i];
     }
 
     // check that longest side is less than the sum of the others.  
@@ -133,15 +75,13 @@ bool isPolygon(double* side, int numSides)
     return false;
 }
 
-bool isRegular(double* side, int numSides)
+double findPerimeter(double* sideLenths, int numSides)
 {
-    // return true if all side lengths are the same
-    double side0 = side[0];
-    for (int i = 1; i < numSides; i++)
-        if (side[i] != side[0])
-            return false;
+    double perimeter = 0;
+    for (size_t i = 0; i < numSides; i++)
+        perimeter += sideLenths[i];
 
-    return true;
+    return perimeter;
 }
 
 char* findPolygonName(int numSides)
@@ -189,34 +129,175 @@ char* findPolygonName(int numSides)
     }
 }
 
-char* findPolygonDescription()
+char* findPolygonDescription(int numSides, double* sides, double* angles)
 {
     // by calling analyzeTriangle and analyzeQuadrilateral
+    char* description = "";
+    if (numSides == SIDES_PER_TRIANGLE)
+        description = analyzeTriangle(sides);
+    else if (numSides == SIDES_PER_QUADRILATERAL)
+        description = analyzeQuadrilateral(sides, angles);
 
-    return "";
+    return description;
 }
 
-double findRegularAngles(int numSides)
+bool isRegular(double* sides, int numSides)
+{
+    // return true if all side lengths are the same
+    double side0 = sides[0];
+    for (size_t i = 1; i < numSides; i++)
+        if (sides[i] != sides[0])
+            return false;
+
+    return true;
+}
+
+double findRegularPolygonAngles(double* sides, int numSides)
 {
     double numberOfSides = numSides;
     return ((double)180 * (numberOfSides - (double)2) / numberOfSides);
 }
 
-bool pointsMatch(double* xValues, double* yValues, int numSides)
+double findRegularPolygonArea(double* sides, int numSides)
 {
-    for (int i = 0; i < numSides; i++)
-        for (int j = i + 1; j < numSides; j++)
-            if (xValues[i] == xValues[j])
-                if (yValues[i] == yValues[j])
+    const double pi = acos(-1);
+    double apothem = sides[0] / 
+        (2.0 * tan((180.0 / (double)numSides) * pi / 180.0));
+
+    return (double)numSides * sides[0] * apothem / 2.0;
+}
+
+bool pointsMatch(point* coordinates, int numSides)
+{
+    for (size_t i = 0; i < numSides; i++)
+        for (size_t j = i + 1; j < numSides; j++)
+            if (coordinates[i].x == coordinates[j].x)
+                if (coordinates[i].y == coordinates[j].y)
                     return true;
 
     return false;
 }
 
-void printPolygonInfo(POLYGON* p)
+void printPolygonInfo(double* sides, point* vertices, int numSides)
 {
-    // if pointsMatch, do not print coordinates because it likely means that
-    // they are still zeroed because they have not been given by the user
-    if (!pointsMatch(p->xValues, p->yValues, p->numSides))
-        ;// print coordinates
+    /*
+        If pointsMatch, skip printing coordinates because it should mean that
+        they are still zeroed because they have not been given by the user.
+        (This is used instead of checking for points being '(0,0), which could
+        actually be valid.
+    */
+    if (!pointsMatch(vertices, numSides))
+        for (size_t i = 0; i < numSides; ++i)
+            printf("Vertex %d: (%g, %g)\n", (int)i+1, vertices[i].x, vertices[i].y);
+
+    if (sides[0] != 0)
+        ;
+    // print side lengths
+}
+
+// redundant legacy function
+bool isTriangle(double* sides)
+{
+    // checking for <= 0 should be handled by input validation, but 
+    // we will still include this check here... just in case
+    if (sides[0] <= 0 || sides[1] <= 0 || sides[2] <= 0)
+        return false;
+
+    else if (((sides[0] + sides[1]) > sides[2]) &&
+        ((sides[0] + sides[2]) > sides[1]) &&
+        ((sides[1] + sides[2]) > sides[0]))
+        return true;
+
+    else
+        return false;
+}
+
+// determine angles based on side lengths
+void findTriangleAngles(double* sides, double* angles)
+{
+    angles[0] = radiansToDegrees(acos((pow(sides[1], 2) + pow(sides[2], 2)
+        - pow(sides[0], 2)) / (2.0 * sides[1] * sides[2])));
+
+    angles[1] = radiansToDegrees(acos((pow(sides[0], 2) + pow(sides[2], 2)
+        - pow(sides[1], 2)) / (2.0 * sides[0] * sides[2])));
+
+    angles[2] = radiansToDegrees(acos((pow(sides[0], 2) + pow(sides[1], 2)
+        - pow(sides[2], 2)) / (2.0 * sides[0] * sides[1])));
+
+    printf("Angles: %lf  %lf  %lf \n\n\n", angles[0], angles[1], angles[2]);
+}
+
+double findTriangleArea(double* sides)
+{
+    // using Heron's formula
+    double halfPerim = findPerimeter(sides, SIDES_PER_TRIANGLE) / (double)2;
+    return sqrt(halfPerim * (halfPerim - sides[0]) * (halfPerim - sides[1])
+        * (halfPerim - sides[2]));
+}
+
+char* analyzeTriangle(double* sides)
+{
+    char* result = "";
+    if (!isTriangle(sides))     // single function to check this
+    {
+        result = "Not a triangle";
+    }
+    else if (sides[0] == sides[1] && sides[0] == sides[2])
+    {
+        result = "Equilateral triangle";
+    }
+    else if ((sides[0] == sides[1] && sides[0] != sides[2]) ||
+        (sides[0] == sides[2] && sides[0] != sides[1]) ||
+        (sides[1] == sides[2] && sides[1] != sides[0]))
+    {
+        result = "Isosceles triangle";
+    }
+    else
+    {
+        result = "Scalene triangle";
+    }
+    return result;
+}
+
+double radiansToDegrees(double rad)
+{
+    return rad * (180.0 / acos(-1));
+}
+
+char* analyzeQuadrilateral(double* sides, double* angles)
+{
+    int numEquivalentSides = 0;
+    int numEquivalentAngles = 0;
+
+    return "";
+}
+
+// determine side lengths based on coordinates of points
+void findSideLengths(point* vertices, double* sides, int numSides)
+{
+    // using pythagorean theorem
+    for (size_t i = 0; i < numSides; i++)
+        ;
+
+}
+
+bool orthogonal(point a, point b, point c)
+{
+    return (b.x - a.x) * (b.x - c.x) + (b.y - a.y) * (b.y - c.y) == 0;
+}
+
+bool rectangle(point a, point b, point c, point d)
+{
+    return
+        orthogonal(a, b, c) &&
+        orthogonal(b, c, d) &&
+        orthogonal(b, d, a);
+}
+
+bool points(point a, point b, point c, point d)
+{
+    return
+        rectangle(a, b, c, d) ||
+        rectangle(b, c, d, a) ||
+        rectangle(c, a, b, d);
 }

@@ -7,11 +7,8 @@
 #include <stdbool.h>
 
 void printWelcome(void);
-
 void printMainMenu(void);
-
-bool inputAndHandleMenuResponse(int* numSides, double* sideLengths);
+bool runMainMenu(int* numSides, double* sideLengths, point* coordinates);
 
 int inputSideLengths(double* sideLengths);
-
-bool inputPoints(double* xValues, double* yValues);
+int inputPoints(point* coordinates);

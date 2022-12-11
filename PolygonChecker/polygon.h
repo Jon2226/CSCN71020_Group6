@@ -9,65 +9,57 @@
 #define MAX_SIDES                  20
 #define SIDES_PER_TRIANGLE          3    // no magic values!
 #define SIDES_PER_QUADRILATERAL     4
+#define MAX_STRING_LEN             20
 
+typedef struct point
+{
+    double x, y;
+} point;
+
+// not used yet
 typedef struct polygon
 {
-    int numSides;
-    double sides[MAX_SIDES];
     // Note: angle 0 will be the angle between sides 0 and 1, 
     // so the final angle N will be between side N and side 0
+    int numSides;
+    double sides[MAX_SIDES];
     double angles[MAX_SIDES];
-    double xValues[MAX_SIDES];
-    double yValues[MAX_SIDES];
+    point vertices[MAX_SIDES];
     bool regular;
-    char* name;           // e.g. triangle, quadrilateral...
-    char* description;    // e.g. isosceles, square, trapezoid...
+    char name[MAX_STRING_LEN];           // e.g. triangle, quadrilateral, pentagon...
+    char description[MAX_STRING_LEN];    // e.g. isosceles, square, trapezoid...
 } POLYGON;
 
-// bool analyzePolygon(int numSides, double* sideLengths);
+point createPoint(double xValue, double yValue);
+//point copyPoint(point* pointToCopy);
+//void disposePoint(point* pointToDispose);
 
+POLYGON createPolygon(int numSides, double* sideLengths, double* angles, 
+    point* coordinates, bool regular, char* name, char* description);
+//POLYGON copyPolygon(POLYGON* polygonToCopy);
+//void disposePolygon(POLYGON* polygonToDispose);
+
+// functions to analyze polygons (should be refactored to use polygon struct)
+bool analyzePolygon(int numSides, double* sideLengths, double* angles);
+bool isPolygon(double* sides, int numSides);
+void findSideLengths(point* vertices, double* sides, int numSides);
+double findPerimeter(double* sideLenths, int numSides);
+char* findPolygonName(int numSides);
+char* findPolygonDescription(int numSides, double* sides, double* angles);
+bool isRegular(double* sides, int numSides);
+double findRegularPolygonAngles(double* sides, int numSides);
+double findRegularPolygonArea(double* sides, int numSides);
+bool pointsMatch(point* coordinates, int numSides);
+
+void printPolygonInfo(double* sides, point* vertices, int numSides);     // display all known data
+
+// triangle functions
+bool isTriangle(double* sides);        // redundant
+void findTriangleAngles(double* sides, double* angles);
+double findTriangleArea(double* sides);
 char* analyzeTriangle(double* sides);
-
-char* analyzeQuadrilateral(double* sides, double* angles);
-
-bool isTriangle(double* sides);
 
 double radiansToDegrees(double rad);
 
-void findAngles(double* sides, double* angles);
-
-void findSideLengths(double* xValues, double* yValues, double* sides);
-
-double calculatePerimeter(double* sideLenths, int numSides);
-
-// new stuff... needs to be sorted later
-bool isPolygon(double* side, int numSides);
-
-bool isRegular(double* side, int numSides);
-
-char* findPolygonName(int numSides);
-
-char* findPolygonDescription();
-
-double findRegularAngles(int numSides);
-
-/* the following are not implemented... yet */
-POLYGON createPolygon(int numSides, double* sides, double* angles,
-    bool regular, char* name, char* description);
-
-void printPolygonInfo(POLYGON*);     // display all known data
-
-double calculateAreaOfRegularPolygon(double* sideLenths, int numSides);
-double calculateAreaOfTriangle(double* sideLenths, int numSides);
-
-// access struct members
-void getSides(POLYGON*, double*);
-void getAngles(POLYGON*, double*);
-void getNumSides(POLYGON*, int*);
-void getRegular(POLYGON*, bool*);
-void getPolygonName(POLYGON*, char*);
-void getPolygonDesc(POLYGON*, char*);
-
-void drawPolygon(POLYGON*);          // this will require a graphics library
-
-bool pointsMatch(double* xValues, double* yValues, int numSides);
+// quadrilateral functions
+char* analyzeQuadrilateral(double* sides, double* angles);

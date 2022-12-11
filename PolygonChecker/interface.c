@@ -2,13 +2,13 @@
 // Group 6: Jonathan Ward, Drasti Patel, Komalpreet Kaur, Nonso Ekpunobi
 
 // user interface implementation for polygon checker
-#include <math.h>
+
 #include "polygon.h"
 #include "interface.h"
 #include "input.h"
 
-#define SIDES_PER_TRIANGLE  3    // no magic values!
-#define MAX_BUF             30   // max input length for fgets()
+#define SIDES_PER_TRIANGLE       3    // no magic values!
+#define MAX_BUF                 30    // max input length for fgets()
 
 void printWelcome(void)
 {
@@ -20,6 +20,7 @@ void printWelcome(void)
 
 void printMainMenu(void)
 {
+    puts("________________________________________________________________________________");
     puts("\nPlease enter a number from the menu below.");
     puts("1. Enter up to 20 side lengths, each separated by a newline.");
     puts("2. Enter up to 20 (x,y) coordinate pairs, each separated by a newline.");
@@ -27,7 +28,7 @@ void printMainMenu(void)
     puts("0. Exit program.\n");
 }
 
-bool inputAndHandleMenuResponse(int* numSides, double* sideLengths)
+bool runMainMenu(int* numSides, double* sideLengths, point* coordinates)
 {
     int choice = 0;
     while (!promptAndGetIntegerInput("Please enter a number: ", &choice))
@@ -43,9 +44,9 @@ bool inputAndHandleMenuResponse(int* numSides, double* sideLengths)
         // if user cancels, reset side lengths in case they input some
         if (*numSides == 0)
         {
-            for (int i = 0; i < MAX_SIDES; i++)
+            for (size_t i = 0; i < MAX_SIDES; i++)
                 sideLengths[i] = 0;
-            
+
             break;
         }
         else
@@ -54,18 +55,26 @@ bool inputAndHandleMenuResponse(int* numSides, double* sideLengths)
 
         // parrot the user's input for testing purposes
         puts("\n\nReading the side lengths as follows:");
-        for (int i = 0; i < *numSides; i++)
-            printf("Side %d: %g\n", i + 1, sideLengths[i]);
+        for (size_t i = 0; i < *numSides; i++)
+            printf("Side %d: %g\n", (int)i + 1, sideLengths[i]);
+        
         printf("There are %d sides.\n", *numSides);
 
         puts("\n");
         break;
 
     case 2:
+        *numSides = inputPoints(coordinates);
 
+        // parrot the user's input for testing purposes
+        puts("\n\nReading the coordinates as follows:");
+        for (size_t i = 0; i < *numSides; i++)
+            printf("Point %d: (%g, %g)\n", (int)i + 1, coordinates[i].x, coordinates[i].y);
+        
+        printf("There are %d points.\n", *numSides);
 
-    case 3:
-
+    //case 3:
+        // nothing yet
 
     default:
         puts("Invalid menu choice.  Please try again");
@@ -77,28 +86,50 @@ bool inputAndHandleMenuResponse(int* numSides, double* sideLengths)
 int inputSideLengths(double* sideLengths)
 {
     int numSides = 0;
-    puts("Please enter up to 20 side lengths.  Enter 0 when done, or -1 to cancel.");
+    int status = -1;
+    puts("Please enter up to 20 side lengths.  Enter F when finished, or C to cancel.");
     while (numSides < MAX_SIDES)
     {
-        if (!promptAndGetDoubleInput("", &sideLengths[numSides]))
-        {
-            printf("Invalid side length.  Please try again.");
-            numSides--;
-        }
-
-        if (sideLengths[numSides] == -1)
-            return 0;
-        else if (sideLengths[numSides] == 0)
+        status = promptAndGetDoubleInputWithEscape("", &sideLengths[numSides], 'f', 'c');
+        if (status == 0)
+            numSides++;
+        else if (status == 1)
             return numSides;
-
-        numSides++;
+        else if (status == 2)
+            return 0;
+        else
+            puts("Invalid side length.  Please try again.");
     }
-    return 0;
+    return numSides;
 }
 
 // take x and y points from user
-bool inputPoints(double* xValues, double* yValues)
+int inputPoints(point* coordinates)
 {
-
+    int numPoints = 0;
+    int status = -1;
+    puts("Please enter up to 20 (x,y) coordinates.  Enter F when finished, or C to cancel.");
+    while (numPoints < MAX_SIDES)
+    {
+        status = promptAndGetDoubleInputWithEscape("X: ", &coordinates[numPoints].x, 'f', 'c');
+        if (status == 0)
+        {
+            status = promptAndGetDoubleInputWithEscape("Y: ", &coordinates[numPoints].y, 'f', 'c');
+            if (status == 0)
+                numPoints++;
+            else if (status == 1)
+                puts("You must input both X and Y values for the last coordinate before finishing.");
+            else if (status == 2)
+                return 0;
+            else
+                puts("Invalid Y-value.  The preceding X-value will be ignored.  Please try again.");
+        }
+        else if (status == 1)
+            return numPoints;
+        else if (status == 2)
+            return 0;
+        else
+            puts("Invalid X-value.  Please try again.");
+    }
+    return numPoints;
 }
-

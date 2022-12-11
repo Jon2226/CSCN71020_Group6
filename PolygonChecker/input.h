@@ -9,15 +9,15 @@
 #include <stdio.h>
 
 int countOfCharInString(char* string, char c);
-
 void removeNewLineFromString(char* string);
-
-void removeWhitespaceFromString(char* string);
+void removeWhiteSpaceFromString(char* string);
 
 bool stringIsNumeric(char* string);
 
 bool promptAndGetDoubleInput(char* prompt, double* response);
-
 bool promptAndGetIntegerInput(char* prompt, int* response);
-
 bool promptAndGetStringInput(char* prompt, char* response, size_t max);
+int promptAndGetDoubleInputWithEscape(char* prompt, double* response, 
+    char finished, char cancel);
+
+char returnSingleChar(void);

@@ -11,14 +11,18 @@
 
 int main()
 {
-    printWelcome();
+    // in future we might switch to a POLYGON struct to hold all this data,
+    // and pass around a pointer/array for that instead of all these
     double sideLengths[MAX_SIDES] = { 0 };
+    double angles[MAX_SIDES] = { 0 };
+    point vertices[MAX_SIDES] = { 0 };
     int numSides = 0;
 
-    do 
+    printWelcome();
+    do
     {
         printMainMenu();
-    } while (inputAndHandleMenuResponse(&numSides, sideLengths));
+    } while (runMainMenu(&numSides, sideLengths, vertices));
 
-	return 0;
+    return 0;
 }
