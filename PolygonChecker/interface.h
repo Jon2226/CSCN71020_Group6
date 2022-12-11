@@ -8,7 +8,8 @@
 
 void printWelcome(void);
 void printMainMenu(void);
-bool runMainMenu(int* numSides, double* sideLengths, point* coordinates);
+bool runMainMenu(int* numSides, double* sideLengths, double* angles, 
+    point* coordinates);
 
 int inputSideLengths(double* sideLengths);
 int inputPoints(point* coordinates);

@@ -28,7 +28,8 @@ void printMainMenu(void)
     puts("0. Exit program.\n");
 }
 
-bool runMainMenu(int* numSides, double* sideLengths, point* coordinates)
+bool runMainMenu(int* numSides, double* sideLengths, double* angles, 
+    point* coordinates)
 {
     int choice = 0;
     while (!promptAndGetIntegerInput("Please enter a number: ", &choice))
@@ -49,29 +50,41 @@ bool runMainMenu(int* numSides, double* sideLengths, point* coordinates)
 
             break;
         }
-        else
-            // analyze polygon and display results
-            ;
-
         // parrot the user's input for testing purposes
         puts("\n\nReading the side lengths as follows:");
         for (size_t i = 0; i < *numSides; i++)
             printf("Side %d: %g\n", (int)i + 1, sideLengths[i]);
+        puts("\n");
         
         printf("There are %d sides.\n", *numSides);
+        // analyze polygon and display results
+        analyzePolygon(numSides, sideLengths, angles, coordinates);
 
-        puts("\n");
         break;
 
     case 2:
         *numSides = inputPoints(coordinates);
+        // if user cancels, reset points in case they input some
+        if (*numSides == 0)
+        {
+            for (size_t i = 0; i < MAX_SIDES; i++)
+            {
+                coordinates[i].x = 0;
+                coordinates[i].y = 0;
+            }
+            break;
+        }
 
         // parrot the user's input for testing purposes
         puts("\n\nReading the coordinates as follows:");
         for (size_t i = 0; i < *numSides; i++)
-            printf("Point %d: (%g, %g)\n", (int)i + 1, coordinates[i].x, coordinates[i].y);
+            printf("Point %d: (%g, %g)\n", (int)i + 1, coordinates[i].x, 
+                coordinates[i].y);
+        puts("\n");
         
         printf("There are %d points.\n", *numSides);
+        // analyze polygon and display results
+        analyzePolygon(numSides, sideLengths, angles, coordinates);
 
     //case 3:
         // nothing yet

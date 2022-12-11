@@ -1,4 +1,8 @@
 ﻿  interface.c
+C:\Users\Jon\Documents\Nextcloud\Code\Git\CSCN71020_Group6\PolygonChecker\interface.c(61,32): warning C4047: 'function': 'int' differs in levels of indirection from 'int *'
+C:\Users\Jon\Documents\Nextcloud\Code\Git\CSCN71020_Group6\PolygonChecker\interface.c(61,24): warning C4024: 'analyzePolygon': different types for formal and actual parameter 1
+C:\Users\Jon\Documents\Nextcloud\Code\Git\CSCN71020_Group6\PolygonChecker\interface.c(87,32): warning C4047: 'function': 'int' differs in levels of indirection from 'int *'
+C:\Users\Jon\Documents\Nextcloud\Code\Git\CSCN71020_Group6\PolygonChecker\interface.c(87,24): warning C4024: 'analyzePolygon': different types for formal and actual parameter 1
   main.c
   polygon.c
   Generating Code...

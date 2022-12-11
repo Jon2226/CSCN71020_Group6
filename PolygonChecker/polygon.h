@@ -40,12 +40,13 @@ POLYGON createPolygon(int numSides, double* sideLengths, double* angles,
 //void disposePolygon(POLYGON* polygonToDispose);
 
 // functions to analyze polygons (should be refactored to use polygon struct)
-bool analyzePolygon(int numSides, double* sideLengths, double* angles);
+bool analyzePolygon(int numSides, double* sideLengths, double* angles,
+    point* coordinates);
 bool isPolygon(double* sides, int numSides);
 void findSideLengths(point* vertices, double* sides, int numSides);
 double findPerimeter(double* sideLenths, int numSides);
 char* findPolygonName(int numSides);
-char* findPolygonDescription(int numSides, double* sides, double* angles);
+//char* findPolygonDescription(int numSides, double* sides, double* angles);
 bool isRegular(double* sides, int numSides);
 double findRegularPolygonAngles(double* sides, int numSides);
 double findRegularPolygonArea(double* sides, int numSides);
@@ -62,4 +63,8 @@ char* analyzeTriangle(double* sides);
 double radiansToDegrees(double rad);
 
 // quadrilateral functions
-char* analyzeQuadrilateral(double* sides, double* angles);
+char* analyzeQuadrilateral(double* sides, double* angles, point* vertices);
+double getDistance(point a, point b);
+bool orthogonal(point a, point b, point c);
+bool rectangle(point a, point b, point c, point d);
+bool canFormRectangle(point a, point b, point c, point d);

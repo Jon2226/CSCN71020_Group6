@@ -22,7 +22,7 @@ int main()
     do
     {
         printMainMenu();
-    } while (runMainMenu(&numSides, sideLengths, vertices));
+    } while (runMainMenu(&numSides, sideLengths, angles, vertices));
 
     return 0;
 }

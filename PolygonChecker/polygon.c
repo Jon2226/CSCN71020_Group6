@@ -38,13 +38,40 @@ POLYGON createPolygon(int numSides, double* sideLengths, double* angles,
     return p;
 }
 
-bool analyzePolygon(int numSides, double* sideLengths, double* angles)
+bool analyzePolygon(int numSides, double* sideLengths, double* angles, 
+    point* coordinates)
 {
     if (!isPolygon(sideLengths, numSides))
         return false;
 
+    puts(findPolygonName(numSides));
 
+    if (isRegular(sideLengths, numSides))
+    {
+        puts("This is a regular polygon.");
+        printf("The area is: %g\n", findRegularPolygonArea(sideLengths, numSides));
+        printf("The angles are: %g\n", findRegularPolygonAngles(sideLengths, numSides));
+    }
+    printf("Perimeter: %g\n", findPerimeter(sideLengths, numSides));
 
+    if (numSides == SIDES_PER_TRIANGLE)
+    {
+        puts("This is a triangle.");
+        findTriangleAngles(sideLengths, angles);
+        puts("The angles are: ");
+        for (int i = 0; i < SIDES_PER_TRIANGLE; i++)
+            printf("Angle %d: %g\n", i + 1, angles[i]);
+
+        double area = findTriangleArea(sideLengths);
+        printf("The area is: %g\n", area);
+    }
+    if (numSides == SIDES_PER_QUADRILATERAL)
+    {
+        puts("This is a quadrilateral.");
+        findSideLengths(coordinates, sideLengths, numSides);
+        printf("Specifically, it is a %s\n", analyzeQuadrilateral(sideLengths,
+            angles, coordinates));
+    }
 
     return true;
 }
@@ -128,18 +155,18 @@ char* findPolygonName(int numSides)
         return "";
     }
 }
-
-char* findPolygonDescription(int numSides, double* sides, double* angles)
-{
-    // by calling analyzeTriangle and analyzeQuadrilateral
-    char* description = "";
-    if (numSides == SIDES_PER_TRIANGLE)
-        description = analyzeTriangle(sides);
-    else if (numSides == SIDES_PER_QUADRILATERAL)
-        description = analyzeQuadrilateral(sides, angles);
-
-    return description;
-}
+//
+//char* findPolygonDescription(int numSides, double* sides, double* angles)
+//{
+//    // by calling analyzeTriangle and analyzeQuadrilateral
+//    char* description = "";
+//    if (numSides == SIDES_PER_TRIANGLE)
+//        description = analyzeTriangle(sides);
+//    else if (numSides == SIDES_PER_QUADRILATERAL)
+//        description = analyzeQuadrilateral(sides, angles);
+//
+//    return description;
+//}
 
 bool isRegular(double* sides, int numSides)
 {
@@ -177,23 +204,23 @@ bool pointsMatch(point* coordinates, int numSides)
 
     return false;
 }
-
-void printPolygonInfo(double* sides, point* vertices, int numSides)
-{
-    /*
-        If pointsMatch, skip printing coordinates because it should mean that
-        they are still zeroed because they have not been given by the user.
-        (This is used instead of checking for points being '(0,0), which could
-        actually be valid.
-    */
-    if (!pointsMatch(vertices, numSides))
-        for (size_t i = 0; i < numSides; ++i)
-            printf("Vertex %d: (%g, %g)\n", (int)i+1, vertices[i].x, vertices[i].y);
-
-    if (sides[0] != 0)
-        ;
-    // print side lengths
-}
+//
+//void printPolygonInfo(double* sides, point* vertices, int numSides)
+//{
+//    /*
+//        If pointsMatch, skip printing coordinates because it should mean that
+//        they are still zeroed because they have not been given by the user.
+//        (This is used instead of checking for points being '(0,0), which could
+//        actually be valid.
+//    */
+//    if (!pointsMatch(vertices, numSides))
+//        for (size_t i = 0; i < numSides; ++i)
+//            printf("Vertex %d: (%g, %g)\n", (int)i+1, vertices[i].x, vertices[i].y);
+//
+//    if (sides[0] != 0)
+//        ;
+//    // print side lengths
+//}
 
 // redundant legacy function
 bool isTriangle(double* sides)
@@ -264,10 +291,29 @@ double radiansToDegrees(double rad)
     return rad * (180.0 / acos(-1));
 }
 
-char* analyzeQuadrilateral(double* sides, double* angles)
+char* analyzeQuadrilateral(double* sides, double* angles, point* vertices)
 {
     int numEquivalentSides = 0;
     int numEquivalentAngles = 0;
+    
+    if (sides[0] == sides[1] == sides[2] == sides[3])
+    {
+        //if (angles[0] == 90)
+        if (canFormRectangle(vertices[0], vertices[1], vertices[2], vertices[3]))
+            return "square";
+        else
+            return "rhombus";
+    }
+    else if ((sides[0] == sides[1] && sides[2] == sides[3])
+        || (sides[0] == sides[3] && sides[2] == sides[1])
+        || (sides[0] == sides[2] && sides[1] == sides[3]))
+    {
+        //if (angles[0] == 90)
+        if (canFormRectangle(vertices[0], vertices[1], vertices[2], vertices[3]))
+            return "rectangle";
+        else
+            return "parallelogram or kite";
+    }
 
     return "";
 }
@@ -275,10 +321,20 @@ char* analyzeQuadrilateral(double* sides, double* angles)
 // determine side lengths based on coordinates of points
 void findSideLengths(point* vertices, double* sides, int numSides)
 {
-    // using pythagorean theorem
-    for (size_t i = 0; i < numSides; i++)
-        ;
+    for (int i = 0; i < numSides; i++)
+    {
+        if (i == numSides - 1)
+            sides[i] = getDistance(vertices[0], vertices[i]);
+        else
+            sides[i] = getDistance(vertices[i], vertices[i+1]);
+    }
+}
 
+double getDistance(point a, point b)
+{
+    // using pythagorean theorem
+    return (a.x - b.x) * (a.x - b.x) +
+        (a.y - b.y) * (a.y - b.y);
 }
 
 bool orthogonal(point a, point b, point c)
@@ -294,10 +350,11 @@ bool rectangle(point a, point b, point c, point d)
         orthogonal(b, d, a);
 }
 
-bool points(point a, point b, point c, point d)
+bool canFormRectangle(point a, point b, point c, point d)
 {
     return
         rectangle(a, b, c, d) ||
         rectangle(b, c, d, a) ||
-        rectangle(c, a, b, d);
+        rectangle(c, a, b, d) ||
+        rectangle(d, b, c, a);
 }
